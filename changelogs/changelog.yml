@@ -1,3 +1,16 @@
-# changelogs/changelog.yml
 ---
-releases: {}
+ancestor: null
+releases:
+  1.0.0:
+    changes:
+      breaking_changes:
+        - Detail any changes that break backward compatibility.
+      major_changes:
+        - A major feature change description.
+      minor_changes:
+        - A minor bug fix or improvement.
+      release_summary: This is the initial release of the jcook3701.homelab collection.
+        Ansible Home Lab automation.  Quickly gettup servers and workstations setup.
+    fragments:
+      - initial_release_summary.yml
+    release_date: '2026-02-24'
