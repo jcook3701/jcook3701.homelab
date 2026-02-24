@@ -1,0 +1,68 @@
+# generate_changelog.yml for jcook3701.homelab
+#
+# SPDX-FileCopyrightText: Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+---
+name: Auto-generate Changelog Fragments
+on:
+  pull_request:
+    types:
+      - closed
+    # Limit this workflow ONLY to PRs targeting the 'develop' branch
+    branches:
+      - develop
+  # This can be triggered manually too for the initial setup
+  workflow_dispatch:
+
+permissions:
+  contents: write       # Allows writing files/commits back to the repo
+  pull-requests: read   # Allows reading PR data for antsichaut
+
+jobs:
+  generate-fragments:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch all history so antsichaut can find the last release
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: make python-install
+
+      - name: Generate changelog fragments
+        # Uses GITHUB_TOKEN to authenticate with GitHub API
+        env:
+          # Ensure you have default labels set up in your repo (bug, feature, etc.)
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: >-
+          antsichaut --github_token $GITHUB_TOKEN \
+                     --repository $GITHUB_REPO
+      - name: Lint changelog fragments
+        run: antsibull-changelog lint
+
+      - name: Commit and Push new fragments (if any were created)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "CI: Auto-generate changelog fragments"
+          branch: develop

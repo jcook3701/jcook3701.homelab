@@ -1,0 +1,24 @@
+{
+    "_checkout": null,
+    "_copy_without_render": [
+        "README.md",
+        "_includes/*"
+    ],
+    "_extensions": [
+        "jinja2.ext.do",
+        "jinja2.ext.loopcontrols"
+    ],
+    "_is_sub_template": true,
+    "_jinja2_env_vars": {
+        "lstrip_blocks": true,
+        "trim_blocks": true
+    },
+    "_output_dir": "/home/jcook/Documents/git_repo/jcook3701.homelab/docs/_tmp_docs",
+    "_repo_dir": "/home/jcook/.cookiecutters/sphinx-cookiecutter",
+    "_template": "https://github.com/jcook3701/sphinx-cookiecutter.git",
+    "author": "Jared Cook",
+    "description": "Ansible Home Lab automation.  Quickly gettup servers and workstations setup.",
+    "project_name": "homelab",
+    "project_slug": "jcook3701.homelab",
+    "version": "1.0.0"
+}
