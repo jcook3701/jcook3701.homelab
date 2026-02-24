@@ -21,6 +21,36 @@ parent: jcook3701.homelab
 * `infrastructure` - 
 
 
+* `{{ autobuild.git_repo.tags }}` - 
+
+
+* `server` - 
+
+
+* `update-workstations` - 
+
+
+* `backup-workstations` - 
+
+
+* `backup-nas` - 
+
+
+* `create-cron` - 
+
+
+* `remove-cron` - 
+
+
+* `workstation` - 
+
+
+* `clear-logs` - 
+
+
+* `debug` - 
+
+
 
 Documentation generated using: [Ansible-autodoc](https://github.com/AndresBott/ansible-autodoc)
 

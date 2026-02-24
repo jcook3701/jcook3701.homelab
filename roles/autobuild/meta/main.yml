@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+galaxy_info:
+  author: Jared Cook
+  description: ""
+  # company: "Optional Company Name"
+
+  license: "AGPL-3.0-or-later"
+
+  min_ansible_version: ">=2.10"
+  role_name: autobuild
+
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+
+  galaxy_tags:
+    - homelab
+    - desktop
+    - server
+    - apps
+
+dependencies: []

@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+pkgs_gui:
+  install:
+    google_chrome: true
+    i3: true
+    mixxx: true
+    flatpak: true
+
+  pkgs_flatpak:
+    install_vars:
+      discord: true
+      github_desktop: true
+
+    pkgs_snap:
+      install_vars:
+        code_install: true

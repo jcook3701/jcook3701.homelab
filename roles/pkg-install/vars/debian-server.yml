@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+pkg_group:
+  pkgs_common: true
+  pkgs_extras: false
+  pkgs_gui: false
+  pkgs_server: true
+  pkgs_software_development: false
+  pkgs_software_libs: false
+
+# Domain Options
+top_level_domain: "com"
+second_level_domain: "jcook3701"
+domain_name: "{{ second_level_domain }}.{{ top_level_domain }}"

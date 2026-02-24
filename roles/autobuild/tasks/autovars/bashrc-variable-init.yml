@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Collect running user facts
+  when: sudo_user is not defined
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+
+# TODO: When autobuild.build.prefix need to update autobuild.bashrc.marker to include install path
+
+- name: Initialize bashrc variables
+  block:
+    - name: set base bashrc export type fact
+      when: autobuild.build.type is defined
+      ansible.builtin.set_fact:
+        bashrc_export: >-
+          {{ bash_export_types[autobuild.build.type] }}
+
+    - name: set bashrc block for lib or bin prefix
+      when: bashrc_export is defined
+      ansible.builtin.set_fact:
+        bashrc_block: >-
+          {{ ['export', ' ', bashrc_export, '=', autobuild.build.full_install_path, '$', bashrc_export]
+            | join('')
+          }}
+
+    - name: set base bashrc facts
+      ansible.builtin.set_fact:
+        bashrc:
+          name: "{{ autobuild.git_repo.name }}"
+          marker: "# {mark} Ansible - {{ autobuild.git_repo.name }}"
+          block: "{{ lookup('template', 'utilities/bashrc-block.j2') }}"
+
+    - name: View .bashrc settings
+      ansible.builtin.debug:
+        msg: >-
+          {{ bashrc }}
+
+    - name: Set bashrc block  build with prefix defined
+      ansible.builtin.set_fact:
+        autobuild: >-
+          {{ autobuild
+            | combine({'bashrc': bashrc })
+          }}
+
+#  when: autobuild.build.bashrc is not defined and autobuild.build.prefix is defined

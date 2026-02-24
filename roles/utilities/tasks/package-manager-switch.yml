@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-init-routine
+# Purpose is to install proper package dependencies regardless of operating system.
+---
+- name: Package Manager Switch
+  when: pkgs is defined
+  block:
+    - name: Print Packages to Install with apt-get
+      ansible.builtin.debug:
+        msg: "{{ pkgs.apt }}"
+      when: ansible_facts['os_family']|lower == 'debian' and pkgs.apt is defined
+
+    - name: Ensure required packages are installed with apt-get
+      ansible.builtin.apt:
+        pkg: "{{ pkgs.apt }}"
+        state: present
+        update_cache: true
+      when: ansible_facts['os_family']|lower == 'debian' and pkgs.apt is defined
+
+    - name: Ensure required packages are installed with dnf
+      ansible.builtin.dnf:
+        name: "{{ pkgs.dnf }}"
+        state: present
+      when: ansible_facts['os_family']|lower == 'redhat' and pkgs.def is defined
+
+    - name: Ensure required packages are installed with pacman
+      community.general.pacman:
+        name: "{{ pkgs.pacman }}"
+        state: present
+        update_cache: true
+      when: ansible_facts['os_family']|lower == 'archlinux' and pkgs.pacman is defined

@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-routine
+# Purpose is to Generate 'update-alternatives' variable used in update-alternatives.yml
+
+# @param item?: {raw_tag: string, project: string, major: string, minor: string, patch: string}
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Initialize update-alternatives variables
+  when: item is defined and autobuild is defined
+  block:
+
+    - name: Generate empty update-alternatives variable
+      ansible.builtin.set_fact:
+        update_alternatives: null
+
+    - name: Update update-alternatives variable with link
+      ansible.builtin.set_fact:
+        update_alternatives: >-
+          {{ update_alternatives
+            | combine({'link': ( '/usr/bin/', git_repo.name ) | path_join})
+          }}
+
+    - name: Update update-alternatives variable with name
+      ansible.builtin.set_fact:
+        update_alternatives: >-
+          {{ update_alternatives
+            | combine({'name': git_repo.name})
+          }}
+
+      # TODO: Finish this so it isn't using checkinstall variable
+    - name: Update update-alternatives variable with with installation path
+      ansible.builtin.set_fact:
+        update_alternatives: >-
+          {{ update_alternatives
+            | combine({'path': ( build_paths.install_path, autobuild.git_repo.name, pkgname ) | path_join})
+          }}
+
+
+    - name: Display 'update_alternatives' variable after initialization
+      ansible.builtin.debug:
+        msg: "{{ update_alternatives }}"
+      when: update_alternatives is defined
+
+    # TODO: Maybe set option for priority otherwise it is always going to default back to 50.

@@ -1,0 +1,11 @@
+
+# BEGIN Ansible - {{ }}
+{% if build.script == "meson-ninja" %}
+
+{% endif %}
+
+{% if build.script == "make" %}
+
+{% endif %}
+
+{{ build.bashrc.marker }}

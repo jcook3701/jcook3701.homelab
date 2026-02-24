@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Get username of the sudo user
+  ansible.builtin.set_fact:
+    sudo_user: "{{ ansible_env.SUDO_USER or ansible_user_id }}"
+
+- name: Get UID, GID, and home directory of the sudo user
+  ansible.builtin.command: "bash -c 'id -u {{ sudo_user }} && id -g {{ sudo_user }} && echo ~{{ sudo_user }}'"
+  register: sudo_user_details
+
+- name: Parse UID, GID, and home directory
+  ansible.builtin.set_fact:
+    sudo_user_uid: "{{ sudo_user_details.stdout_lines[0] }}"
+    sudo_user_gid: "{{ sudo_user_details.stdout_lines[1] }}"
+    sudo_user_home: "{{ sudo_user_details.stdout_lines[2] }}"
+
+- name: Show the details
+  ansible.builtin.debug:
+    msg:
+      - "SUDO_USER: {{ sudo_user }}"
+      - "UID: {{ sudo_user_uid }}"
+      - "GID: {{ sudo_user_gid }}"
+      - "Home Directory: {{ sudo_user_home }}"
+  tags: [never, debug]

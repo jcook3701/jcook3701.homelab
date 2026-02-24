@@ -1,0 +1,81 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# This is a subroutine of pkg-source-build-routine
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Build {{ autobuild.git_repo.name }} from source using Make
+  become: true
+  become_user: "{{ sudo_user }}"
+  when: autobuild.git_repo is defined and autobuild.git_repo.directory is defined
+  block:
+    - name: Clean {{ autobuild.git_repo.name }} with Make to ensure clean build
+      ansible.builtin.command: make clean
+      args:
+        chdir: "{{ autobuild.git_repo.directory }}"
+      become: true
+      become_user: root
+
+    - name: Check if Autogen configure script exists
+      ansible.builtin.stat:
+        path: "{{ autobuild.git_repo.directory }}/configure"
+      register: configure_check
+
+    - name: Make Configuration if using autogen
+      when: configure_check.stat.exists
+      block:
+        # TODO: This same step will need to be added to cmake
+        # NOTE: Assumed that this path is /opt/**
+        - name: Ensure Installation Path exists
+          ansible.builtin.file:
+            path: "{{ autobuild.build.full_install_path }}"
+            state: directory
+            owner: root
+            group: root
+            mode: "0755"
+          become: true
+          become_user: root
+          when: autobuild.build.full_install_path is defined
+
+        - name: Build Prefix Settings Generation
+          ansible.builtin.set_fact:
+            autobuild: >-
+              {{ autobuild
+                | combine({'build': autobuild.build
+                  | combine({'prefix': ('--prefix=', autobuild.build.full_install_path) | join('')})
+                })
+              }}
+
+        - name: View Build Variables
+          ansible.builtin.debug:
+            msg: "{{ autobuild.build }}"
+
+        - name: build configure
+          ansible.builtin.set_fact:
+            configure: >-
+              {{ ['./configure', autobuild.build.prefix, autobuild.build.flags] | select('defined') | join(' ') }}
+
+        - name: View Build Variables
+          ansible.builtin.debug:
+            msg: "{{ configure }}"
+
+        - name: Run ./autogen.sh for autogen project {{ autobuild.git_repo.name }}
+          ansible.builtin.shell: autogen.sh > ansible-autogen.log
+          args:
+            executable: /bin/bash
+            chdir: "{{ autobuild.git_repo.directory }}"
+
+        - name: Run ./configure for autogen project {{ autobuild.git_repo.name }}
+          ansible.builtin.shell: "{{ configure }} > ansible-configure.log"
+          args:
+            executable: /bin/bash
+            chdir: "{{ autobuild.git_repo.directory }}"
+
+    - name: Build {{ autobuild.git_repo.name }} with Make
+      ansible.builtin.shell: make > ansible-make.log
+      args:
+        executable: /bin/bash
+        chdir: "{{ autobuild.git_repo.directory }}"

@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+deb_architecture:
+  {
+    "armv6l": "armhf",
+    "armv7l": "armhf",
+    "aarch64": "arm64",
+    "x86_64": "amd64",
+    "i386": "i386",
+  }
+
+service_groups_users:
+  - "jcook"
+
+editor_bashrc: "nano"
+
+github:
+  username: "jcook3701"
+  email: "jcook3701@gmail.com"

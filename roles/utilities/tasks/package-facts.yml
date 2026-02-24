@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Ansible package facts
+  block:
+    - name: Check installed packages
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Check if ansible has been installed
+      ansible.builtin.debug:
+        msg: "{{ ansible_facts.packages['ansible'] | length }} versions of ansible are installed!"
+      when: "'ansible' in ansible_facts.packages"

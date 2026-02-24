@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Install Common Packages
+  ansible.builtin.include_tasks: pkgs-common.yml
+  when: pkg_group.pkgs_common
+
+- name: Installing Extra Packages
+  ansible.builtin.include_tasks: pkgs-extras.yml
+  when: pkg_group.pkgs_extras
+
+- name: Installing GUI Packages
+  ansible.builtin.include_tasks: pkgs-gui.yml
+  when: pkg_group.pkgs_gui
+
+- name: Installing Server Packages
+  ansible.builtin.include_tasks: pkgs-server.yml
+  when: pkg_group.pkgs_server
+
+- name: Installing Software Development Packages
+  ansible.builtin.include_tasks: pkgs-software-development.yml
+  when: pkg_group.pkgs_software_development
+
+- name: Installing Software Library Packages
+  ansible.builtin.include_tasks: pkgs-software-libs.yml
+  when: pkg_group.pkgs_software_libs

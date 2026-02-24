@@ -1,0 +1,34 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-init-routine
+# TODO: Figure out why I set all the tasks tags to never.
+---
+- name: Import 'undef'
+  ansible.builtin.set_fact:
+    undef: "{{ omit }}"
+  tags: [never]
+
+- name: Reset 'autobuild' variable before re-initializing
+  ansible.builtin.set_fact:
+    autobuild: null
+
+- name: Debug reset 'git_repo' variable before re-including
+  ansible.builtin.debug:
+    msg: "{{ git_repo }}"
+  tags: [never]
+
+- name: Reset 'build' variable before re-including
+  ansible.builtin.set_fact:
+    build: "{{ omit }}"
+  tags: [never]
+
+- name: Reset 'pkgs' variable before re-including
+  ansible.builtin.set_fact:
+    pkgs: "{{ omit }}"
+  tags: [never]
+
+- name: Reset 'checkinstall' variable before re-including
+  ansible.builtin.set_fact:
+    checkinstall: "{{ omit }}"
+  tags: [never]

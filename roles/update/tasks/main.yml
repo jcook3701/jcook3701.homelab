@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Update all packages for RHEL
+  ansible.builtin.import_tasks: redhat.yml
+  when: ansible_facts['os_family']|lower == 'redhat'
+
+- name: Update all packages for Debian
+  ansible.builtin.import_tasks: debian.yml
+  when: ansible_facts['os_family']|lower == 'debian'

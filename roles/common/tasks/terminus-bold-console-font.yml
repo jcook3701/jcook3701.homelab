@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# noqa: E501
+# TODO: "https://www.linux.com/topic/desktop/how-change-your-linux-console-fonts/#:~:text=On%20Debian%2FUbuntu%2Fetc.,package%20for%20you%20at%20openSUSE"
+
+- name: Installing Terminus Fonts.
+  ansible.builtin.apt:
+    pkg:
+      - fonts-terminus-otb
+      - fonts-terminus
+    state: present

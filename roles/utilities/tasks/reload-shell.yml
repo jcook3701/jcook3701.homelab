@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Reload shell
+  ansible.builtin.shell:
+    cmd: "source {{ sudo_user_home }}/.bashrc && exec bash"
+    executable: /bin/bash

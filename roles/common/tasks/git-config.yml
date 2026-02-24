@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Collect running user facts
+  ansible.builtin.include_role:
+    name: pkg-install
+    tasks_from: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Set global Git username
+  become: true
+  become_user: "{{ sudo_user }}"
+  ansible.builtin.git_config:
+    name: user.name
+    value: "{{ github.username }}"
+    scope: global
+
+- name: Set global Git email address
+  become: true
+  become_user: "{{ sudo_user }}"
+  ansible.builtin.git_config:
+    name: user.email
+    value: "{{ github.email }}"
+    scope: global

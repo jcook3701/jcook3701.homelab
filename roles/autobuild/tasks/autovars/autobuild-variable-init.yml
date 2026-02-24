@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# Subroutine of pkg-source-build-init-routine
+# Purpose is to initialize all variables required to install a specific
+# package from source code.
+
+- name: Initialize autobuild variable
+  block:
+    - name: Create autobuild variable.
+      ansible.builtin.set_fact:
+        autobuild: null
+
+    - name: Set the local 'git_repo' variable within the autobuild variable
+      ansible.builtin.set_fact:
+        autobuild:
+          git_repo: "{{ git_repo }}"
+      when: git_repo is defined
+
+    - name: Set the local 'build' variable within the autobuild variable
+      ansible.builtin.set_fact:
+        autobuild: >-
+          {{ autobuild
+            | combine({'build': build})
+          }}
+      when: build is defined
+
+      # NOTE: This is commented because bashrc vars are being moved to build
+#    - name: set the local 'bashrc' variable within the autobuild variable
+#      ansible.builtin.set_fact:
+#        autobuild: >-
+#          {{ autobuild | combine({'bashrc': bashrc }) }}
+#      when: bashrc is defined
+
+    - name: Set the local 'pkgs' variable within the autobuild variable
+      ansible.builtin.set_fact:
+        autobuild: >-
+          {{ autobuild
+            | combine({'pkgs': pkgs})
+          }}
+      when: pkgs is defined
+
+    - name: Display Autobuild Variable after initialization
+      ansible.builtin.debug:
+        msg: "{{ autobuild }}"
+      when: autobuild is defined

@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# call with to create cron:
+# (sudo rights are required to create cron-job.)
+
+# Inlcude variables should not be in block otherwise variables are inherited
+- name: Include cron-job variables
+  ansible.builtin.include_tasks:
+    file: include_vars.yml
+  tags: [never, server] # TODO: Add workstations here eventually
+
+- name: Start creation of ansible cron-jobs
+  ansible.builtin.include_tasks:
+    file: cron-job-template.yml
+  when: included_reg is defined
+  tags: [never, server]
+
+# TODO: Create workstation-cron-jobs.yml
+
+#         - This would run cron-jobs on workstations rather than from the server
+#           for the purpose of load balancing.
+# TODO: Create playbook to install and generally setup ansible on workstations
+# This would allow me to run ansible cron jobs directly on client machines when
+# necessary.

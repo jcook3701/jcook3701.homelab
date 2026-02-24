@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Create Cron-Job Block.
+  tags: [never, create-cron]
+  block:
+    - name: "Create cron-job to {{ role }} {{ hosts }} at {{ hour }}:{{ minute }}."
+      ansible.builtin.cron:
+        name: "{{ role }}_{{ hosts }}_cron_job"
+        minute: "{{ minute }}"
+        hour: "{{ hour }}"
+        user: root
+        job: "ansible-playbook /etc/ansible/playbooks/{{ script }} --tags {{ tags }}"
+        cron_file: "ansible_{{ hosts }}-auto-{{ role }}"
+        state: present
+      when: tags is defined
+
+    - name: "Create cron-job to {{ role }} {{ hosts }} at {{ hour }}:{{ minute }}."
+      ansible.builtin.cron:
+        name: "{{ role }}_{{ hosts }}_cron_job"
+        minute: "{{ minute }}"
+        hour: "{{ hour }}"
+        user: root
+        job: "ansible-playbook /etc/ansible/playbooks/{{ script }}"
+        cron_file: "ansible_{{ hosts }}-auto-{{ role }}"
+        state: present
+      when: tags is undefined
+
+- name: Remove Cron-Job Block.
+  tags: [never, remove-cron]
+  block:
+    - name: "Delete cron-job that is used to {{ role }} {{ hosts }} at {{ hour }}:{{ minute }}."
+      ansible.builtin.cron:
+        name: "{{ role }}_{{ hosts }}_cron_job"
+        cron_file: "ansible_{{ hosts }}-auto-{{ role }}"
+        state: absent

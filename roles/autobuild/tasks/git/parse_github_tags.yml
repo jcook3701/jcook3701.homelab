@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-init-routine.
+# Purpose is to parse 'git_repo.tags' variable and updates
+#   'autobuild.git_repo.parsed_tags' variable.
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Parse {{ autobuild.git_repo.name }} {{ autobuild.git_repo.tags }} for Version and Release
+  become: true
+  become_user: "{{ sudo_user }}"
+  when: autobuild.git_repo is defined and autobuild.git_repo.tags is defined and (autobuild.git_repo.tags | length > 0)
+  block:
+    - name: Parse the github tag for {{ autobuild.git_repo.name }} git repository.
+      parse_tags_module:
+        tags: "{{ autobuild.git_repo.tags }}"
+      register: result
+      when: autobuild.git_repo.parsed_tags is not defined
+
+    - name: Set the latest versions, [Tag, Major, Minor], as an ansible fact
+      ansible.builtin.set_fact:
+        autobuild: >-
+          {{ autobuild
+            | combine({'git_repo': autobuild.git_repo
+              | combine({'parsed_tags': [result.parsed_tags]})})
+          }}
+      when: autobuild.git_repo.parsed_tags is not defined
+
+    - name: Display the parsed results
+      ansible.builtin.debug:
+        msg: "{{ autobuild.git_repo.parsed_tags }}"
+      when: autobuild.git_repo.parsed_tags is defined

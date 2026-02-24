@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-routine
+# Purpose is to update bashrc file for specified package.
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Update .bashrc for {{ autobuild.bashrc.name }}
+  ansible.builtin.blockinfile:
+    dest: "{{ sudo_user_home }}/.bashrc"
+    marker: "{{ autobuild.bashrc.marker }}"
+    block: "{{ autobuild.bashrc.block }}"
+    state: present
+  become: true
+  become_user: "{{ sudo_user }}"
+  when: autobuild.bashrc is defined and sudo_user != "root"

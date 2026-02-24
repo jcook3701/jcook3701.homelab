@@ -1,0 +1,66 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Rdiff-backup Tasks
+  tags: [never, server, workstation]
+  block:
+    - name: Create rdiff-backup destination path variable.
+      ansible.builtin.set_fact:
+        backup_dest_path: "{{ ansible_env.USER }}@{{ dest_server }}::{{ dest_dir }}"
+
+    - name: Debug task - Print - backup_dest_path variable
+      tags: [never, debug]
+      ansible.builtin.debug:
+        var: backup_dest_path
+
+    - name: Initialize excludes options variable
+      ansible.builtin.set_fact:
+        backup_exclude_options: ""
+
+    - name: Generate excludes options variable from exclude list variable
+      ansible.builtin.set_fact:
+        backup_exclude_options: "{{ backup_exclude_options }} --exclude '{{ item }}'"
+      loop: "{{ exclude }}"
+
+    - name: Debug task - Print - backup_exclude_options variable
+      tags: [never, debug]
+      ansible.builtin.debug:
+        var: backup_exclude_options
+
+    - name: Collect current backup datetime
+      ansible.builtin.command:
+        cmd: date "+%Y-%m-%d %H:%M:%S"
+      register: backup_datetime_reg
+
+    - name: "Write datetime to {{ log_filename }}"
+      ansible.builtin.shell:
+        cmd: >-
+          echo Backup for {{ inventory_hostname_short }}
+          started: {{ backup_datetime_reg.stdout }} > {{ log_file_path }}
+
+    - name: Debug task - Print - backup_datetime_reg variable
+      tags: [never, debug]
+      ansible.builtin.debug:
+        var: backup_datetime_reg.stdout
+
+    - name: Run rdiff-backup cmd to push data to destination machine
+      ansible.builtin.shell:
+        cmd: >-
+          rdiff-backup {{ flags }} --include {{ item }}
+          {{ backup_exclude_options }} {{ source_path }}
+          {{ dest_path }}/{{ inventory_hostname_short }}{{ item | regex_replace('\\/', '-') }}
+          >> {{ log_file_path }} 2>&1
+        executable: /bin/bash
+      loop: "{{ include }}"
+      register: backup_rdiff_debug
+
+    - name: Debug task - Print - backup_rdiff_debug variable - rdiff-backup cmd output
+      tags: [never, debug]
+      ansible.builtin.debug:
+        var: backup_rdiff_debug
+
+  # TODO: Now there should be a command to clean up old rdiff-backups
+  #  - name: Remove rdiff-backups that are older than {{ }} days
+  #    ansible.builtin.shell:
+  #      cmd: rdiff-backup ... etc...
+  #      executable: /bin/bash

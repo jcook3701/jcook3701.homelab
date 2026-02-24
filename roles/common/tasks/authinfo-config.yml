@@ -1,0 +1,49 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Collect running user facts
+  ansible.builtin.include_role:
+    name: pkg-install
+    tasks_from: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Include Ansible Vault
+  ansible.builtin.include_vars: /etc/ansible/vault.yml
+
+- name: Ensure ~/.authinfo file exists
+  ansible.builtin.file:
+    path: "{{ sudo_user_home }}/.authinfo"
+    state: touch
+    mode: "0600"
+    owner: "{{ sudo_user_uid }}"
+    group: "{{ sudo_user_gid }}"
+
+- name: Create plaintext authinfo content
+  ansible.builtin.template:
+    src: authinfo.j2
+    dest: "{{ sudo_user_home }}/.authinfo"
+    mode: "0600"
+    owner: "{{ sudo_user_uid }}"
+    group: "{{ sudo_user_gid }}"
+  when: github_user is defined and vault.github_pat_token is defined
+
+- name: Encrypt .authinfo to .authinfo.gpg
+  ansible.builtin.command: >
+    gpg --batch --yes --symmetric --cipher-algo AES256
+    --passphrase {{ vault.gpg_passphrase }}
+    --output {{ sudo_user_home }}/.authinfo.gpg
+    {{ sudo_user_home }}/.authinfo
+  args:
+    creates: "{{ sudo_user_home }}/.authinfo.gpg"
+
+- name: Remove plaintext .authinfo file
+  ansible.builtin.file:
+    path: "{{ sudo_user_home }}/.authinfo"
+    state: absent
+
+- name: Ensure correct permissions on ~/.authinfo.gpg
+  ansible.builtin.file:
+    path: "{{ sudo_user_home }}/.authinfo.gpg"
+    mode: "0600"
+    owner: "{{ sudo_user_uid }}"
+    group: "{{ sudo_user_gid }}"

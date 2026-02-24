@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# This is a subroutine of pkg-source-build-routine
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Source Build of {{ autobuild.git_repo.name }} using Cmake
+  when: autobuild.git_repo is defined and autobuild.git_repo.directory is defined
+  become: true
+  become_user: "{{ sudo_user }}"
+  block:
+    #  - name: Create a build directory
+    #    ansible.builtin.file:
+    #      path: "{{ project_build_dir }}/build"
+    #      state: directory
+
+    - name: Configure build for {{ autobuild.git_repo.name }} with Cmake
+      ansible.builtin.shell:
+        cmd: |
+          "cmake ..
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_INSTALL_PREFIX={{ autobuild.build.full_install_path }} > ansible-cmake.log
+        executable: /bin/bash
+        chdir: "{{ autobuild.git_repo.directory }}/build"
+
+    - name: Build {{ autobuild.git_repo.name }} with Make
+      ansible.builtin.shell: make > ansible-make.log
+      args:
+        executable: /bin/bash
+        chdir: "{{ autobuild.git_repo.directory }}/build"

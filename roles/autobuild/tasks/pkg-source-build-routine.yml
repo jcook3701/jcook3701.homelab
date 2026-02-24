@@ -1,0 +1,96 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# This is a subroutine of pkg-source-build-init-routine.
+# Purpose is to Clone git repository and
+
+# @param item?: {raw_tag: string, project: string, major: string, minor: string, patch: string}
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Package Source Build Routine
+  block:
+    - name: Clone {{ autobuild.git_repo.name }} repository
+      become: true
+      become_user: "{{ sudo_user }}"
+      ansible.builtin.git:
+        repo: >-
+          {{ git_providers[autobuild.git_repo.provider] }}{{ autobuild.git_repo.owner }}/{{ autobuild.git_repo.name }}.git
+        version: "{{ item.raw_tag if item.raw_tag is defined else omit }}"
+        dest: "{{ autobuild.git_repo.directory }}"
+        update: true
+
+      # TODO: Create symlink between
+
+    - name: Update Bashrc File for git repositories with no build
+      ansible.builtin.include_tasks: utilities/bashrc-updater.yml
+      when: autobuild.bashrc.enabled is true and autobuild.build.enabled is false
+
+    - name: Package Source Build and Install
+      when: autobuild.build.enable is true
+      block:
+
+        - name: Initialize checkinstall variables
+          ansible.builtin.include_tasks: utilities/checkinstall-variable-init.yml
+
+        - name: initialize update-alternatives variables
+          ansible.builtin.include_tasks: utilities/update-alternatives-variable-init.yml
+
+        - name: Build the full install path
+          ansible.builtin.set_fact:
+            full_install_path: >-
+              (build_paths.install_path, autobuild.git_repo.name, checkinstall.pkgname) | path_join
+
+        - name: Build Settings Generation 'autobuild.build.full_install_path'
+          ansible.builtin.set_fact:
+            autobuild: >-
+              {{ autobuild
+                | combine({'build': autobuild.build
+                  | combine({'full_install_path': full_install_path})
+                })
+              }}
+
+        - name: View Build Variables
+          ansible.builtin.debug:
+            msg: "{{ autobuild.build }}"
+
+        - name: View Checkinstall Variables
+          ansible.builtin.debug:
+            msg: "{{ checkinstall }}"
+
+        - name: Meson Ninja Build
+          ansible.builtin.include_tasks: utilities/meson-ninja-build.yml
+          when: autobuild.build.script == "meson-ninja"
+
+        - name: Make Build
+          ansible.builtin.include_tasks: utilities/make-build.yml
+          when: autobuild.build.script == "make"
+
+        - name: Cmake Build
+          ansible.builtin.include_tasks: utilities/cmake-build.yml
+          when: autobuild.build.script == "cmake"
+
+        - name: Checkinstall
+          ansible.builtin.include_tasks: utilities/checkinstall.yml
+          when: autobuild.build.checkinstall is true
+
+          # TODO: need to auto-generate either lib or bin path if installed with prefix and no bashrc.block
+          # use autobuild.build.prefix.
+          # TODO: - name:
+          # TODO: ansible.builtin.include_tasks: utilities/bashrc-variable-init.yml
+
+        - name: Update Bashrc File for git repositories with build prefix
+          ansible.builtin.include_tasks: utilities/bashrc-updater.yml
+          when: autobuild.bashrc.enabled and autobuild.build.prefix
+
+        - name: update-alternatives
+          ansible.builtin.include_tasks: utilities/update-alternatives.yml
+          when: autobuild.build.update_alternatives
+
+        - name: Run ldconfig after library install
+          ansible.builtin.command: ldconfig
+          become: true
+          become_user: root
+          when: autobuild.build.library is true

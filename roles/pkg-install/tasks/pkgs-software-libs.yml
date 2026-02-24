@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Import Software Library Package Variables
+  ansible.builtin.include_vars: pkgs-software-libs.yml
+
+- name: Installing Software Library Packages with apt-get
+  ansible.builtin.apt:
+    pkg:
+      - libglib2.0-dev
+      - libssl-dev
+      - libffi-dev
+      - zlib1g-dev
+      - libssl-dev
+    state: present

@@ -1,0 +1,76 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Head routine that is called to build packages from source code.
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: debug
+  ansible.builtin.debug:
+    msg: "git_repo: {{ git_repo }}"
+
+- name: Autobuild variable initialization
+  ansible.builtin.include_tasks: utilities/vars/autobuild-variable-init.yml
+
+- name: Ensure required packages are installed
+  ansible.builtin.include_tasks: utilities/package-manager-switch.yml
+  when: pkgs is defined
+
+- name: Fetch Latest Github Tag if git_repo.tags left undefined
+  ansible.builtin.include_tasks: utilities/git/fetch_github_tags.yml
+  when: autobuild.git_repo.tags is not defined or (autobuild.git_repo.tags | length == 0)
+
+- name: Parse Github tags and add parsed tags to 'autobuild.git_repo.parsed_tags'
+  ansible.builtin.include_tasks: utilities/git/parse_github_tags.yml
+  when: autobuild.git_repo.tags is defined
+
+- name: Initialization Routine for {{ autobuild.git_repo.name }} source package build
+  become: true
+  become_user: "{{ sudo_user }}"
+  when: autobuild.git_repo is defined
+  block:
+    - name: Ensure the build directory exists
+      ansible.builtin.file:
+        path: "{{ sudo_user_home }}/{{ build_paths.home }}"
+        state: directory
+        owner: "{{ sudo_user }}"
+        group: "{{ sudo_user }}"
+        mode: "0755"
+
+    - name: Build the local Git directory path
+      ansible.builtin.set_fact:
+        git_repo_directory: >-
+          {{ (sudo_user_home, build_paths.home, git_repo.name) | path_join }}
+
+    - name: Set the local Git directory path to 'autobuild.git_repo.directory' variable.
+      ansible.builtin.set_fact:
+        autobuild: >-
+          {{
+            autobuild
+              | combine({'git_repo': autobuild.git_repo
+                | combine({'directory': git_repo_directory})
+              })
+          }}
+
+    - name: Test if 'autobuild.git_repo.directory' was updated correctly
+      ansible.builtin.debug:
+        msg: "{{ autobuild.git_repo.directory }}"
+
+- name: Build Routine for {{ autobuild.git_repo.name }} source package
+  when: autobuild.git_repo is defined
+  block:
+    - name: Loop {{ autobuild.git_repo.name }} parsed repository tags and run Source Build Routine
+      ansible.builtin.include_tasks: utilities/pkg-source-build-routine.yml
+      with_items: "{{ autobuild.git_repo.parsed_tags }}"
+      when: autobuild.git_repo.parsed_tags | length > 0
+
+    - name: Source Build Routine for non-tagged git repository
+      ansible.builtin.include_tasks: utilities/pkg-source-build-routine.yml
+      when: autobuild.git_repo.parsed_tags is not defined or (autobuild.git_repo.parsed_tags | length == 0)
+
+# TODO: Maybe figure out what to do with this...
+- name: Source Build Routine for non-tagged git repository
+  ansible.builtin.include_tasks: utilities/clear-build-variables.yml
+  tags: [never]

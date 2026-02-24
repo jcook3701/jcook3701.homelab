@@ -1,0 +1,51 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-routine
+
+# @param item?: {raw_tag: string, project: string, major: string, minor: string, patch: string}
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Initialize checkinstall variables
+  when: item is defined and autobuild is defined
+  block:
+    - name: Package Version
+      ansible.builtin.set_fact:
+        pkgversion: >-
+          {{ [item.major, item.minor, item.patch] | select('defined') | join('.') }}
+
+    - name: Package Name
+      ansible.builtin.set_fact:
+        pkgname: >-
+          {{ autobuild.git_repo.name }}-{{ pkgversion }}
+
+    - name: View Package Version
+      ansible.builtin.debug:
+        msg: >-
+          {{ pkgversion }}
+
+    - name: Set pkgsource
+      ansible.builtin.set_fact:
+        pkgsource: >-
+          {{ autobuild.git_repo.directory }}
+      when: autobuild.build.script == "make"
+
+    - name: Set pkgsource
+      ansible.builtin.set_fact:
+        pkgsource: >-
+          {{ autobuild.git_repo.directory }}/build
+      when: autobuild.build.script == "cmake" or autobuild.build.script == "meson-ninja"
+
+    - name: Checkinstall Settings Generation
+      ansible.builtin.set_fact:
+        checkinstall:
+          pkgname: "{{ pkgname }}"
+          pkgrelease: "{{ item.major if item.major is defined else omit }}"
+          pkgversion: "{{ pkgversion }}"
+          pkgsource: "{{ pkgsource }}"
+          provides: "{{ pkgname }}"
+          maintainer: "{{ sudo_user }}@"
+          pakdir: "{{ sudo_user_home }}/{{ build_paths.pkg_store }}"

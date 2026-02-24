@@ -1,0 +1,24 @@
+{# meson ninja using mesion-install -> checkinstall #}
+{% if build.script == "meson-ninja" %}
+
+{% endif %}
+
+{# make and cmake #}
+{% if build.script == "make" or build.script == "cmake" %}
+checkinstall --default \
+  --pkgname={{ checkinstall.pkgname }} \
+  --pkgrelease={{ checkinstall.pkgrelease }} \
+  --pkgversion={{ checkinstall.pkgversion }} \
+  --pkggroup={{ checkinstall.pkggroup | default("source-build") }} \
+  --provides={{ checkinstall.provides }} \
+  --pkgsource={{ checkinstall.pkgsource }} \
+  --maintainer={{ checkinstall.maintainer }} \
+  --deldoc={{ checkinstall.deldoc | default("yes") }} \
+  --deldesc={{ checkinstall.deldesc | default("yes") }} \
+  --delspec={{ checkinstall.delspec | default("yes") }} \
+  --backup={{ checkinstall.backup | default("no") }} \
+  --install={{ checkinstall.install | default("yes") }} \
+  --pakdir={{ checkinstall.pakdir }}
+{% endif %}
+
+{#    #}

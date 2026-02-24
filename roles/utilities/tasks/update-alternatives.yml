@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-routine
+# Purpose is to run the update-alternatives command for a specific source installation
+---
+- name: Register alternatives
+  ansible.builtin.command:
+    cmd: >-
+      update-alternatives --install
+      {{ alternative.link }}
+      {{ alternative.name }}
+      {{ alternative.path }}
+      {{ alternative.priority | default(50) }}
+  loop: "{{ alternatives }}"
+  loop_control:
+    loop_var: alternative
+  register: result
+  changed_when: "'already exists' not in alternative.stderr"
+
+  # TODO: Figure out if I want this.
+- name: Set default alternative (highest priority)
+  ansible.builtin.command:
+    cmd: >-
+      update-alternatives --set {{ item.name }} {{ item.path }}
+  loop: >-
+    {{ alternatives | groupby('name') | map('last') | map(attribute='1') | map('max', attribute='priority') | list }}
+  when: alternatives | length > 0
+  tags: [never]

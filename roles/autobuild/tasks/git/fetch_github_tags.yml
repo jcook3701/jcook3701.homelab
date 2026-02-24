@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-init-routine
+# Purpose is to set 'autobuild.git_repo.tags' to latest version when no version is specified.
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Set {{ autobuild.git_repo.name }} tag
+  become: true
+  become_user: "{{ sudo_user }}"
+  when: autobuild.git_repo is defined
+  block:
+    - name: Fetch the latest version tag if no version is specified for {{ autobuild.git_repo.name }} git repository.
+      fetch_tags_module:
+        provider: "{{ autobuild.git_repo.provider }}"
+        repo: "{{ autobuild.git_repo.name }}"
+        owner: "{{ autobuild.git_repo.owner }}"
+        latest: true
+      register: result
+      when: autobuild.git_repo.tags is not defined or (autobuild.git_repo.tags | length == 0)
+
+    - name: Set the latest version as an autobuild fact for {{ autobuild.git_repo.name }}
+      ansible.builtin.set_fact:
+        autobuild: "{{ autobuild | combine({'git_repo': autobuild.git_repo | combine({'tags': [result.tags][0]})}) }}"
+      when: autobuild.git_repo.tags is not defined or (autobuild.git_repo.tags | length == 0)
+
+    - name: Display {{ autobuild.git_repo.name }} tags
+      ansible.builtin.debug:
+        msg: "{{ autobuild.git_repo.tags }}"

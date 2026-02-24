@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# This is a subroutine of pkg-source-build-routine
+---
+- name: Collect running user facts
+  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Source Build and Install of {{ autobuild.git_repo.name }} with Meson
+  become: true
+  become_user: "{{ sudo_user }}"
+  when: autobuild.git_repo is defined and autobuild.git_repo.directory is defined
+  block:
+    - name: Configure build for {{ autobuild.git_repo.name }} with Meson
+      ansible.builtin.command:
+        cmd: meson setup build
+        chdir: "{{ autobuild.git_repo.directory }}"
+      args:
+        creates: "{{ autobuild.git_repo.directory }}/build/build.ninja"
+
+    - name: Build {{ autobuild.git_repo.name }} with Ninja
+      ansible.builtin.command: meson compile
+      args:
+        chdir: "{{ autobuild.git_repo.directory }}/build"
+
+  #  - name: Install {{ autobuild.git_repo.name }} with Ninja
+  #    ansible.builtin.command: sudo meson install
+  #    args:
+  #      chdir: "{{ autobuild.git_repo.directory }}/build"

@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+ks_dir: /data/www/html/ks
+menu_dir: /var/lib/tftpboot/pxelinux.cfg/
+
+repo_url: "http://repo.lan.nathancurry.com/repo/centos7-base"
+ks_url: "http://repo.lan.nathancurry.com/ks"
+
+boot_distro: "centos7-1804"
+
+ntp_servers:
+  - gold.lan.nathancurry.com
+  - silver.lan.nathancurry.com
+  - bronze.lan.nathancurry.com
+timezone: "America/Denver"
+hostlist: "{{ groups[all] }}"
+bootargs: "console=ttyS0,115200"
+
+defaults:
+  netmask: 255.255.255.0
+  ns:
+    - 192.168.1.2
+  gw: 192.168.1.1
+  domain: jcook3701.com
+  netdev: eth0
+  drive: vda
