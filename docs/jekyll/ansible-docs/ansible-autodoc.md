@@ -21,9 +21,6 @@ parent: jcook3701.homelab
 * `infrastructure` - 
 
 
-* `{{ autobuild.git_repo.tags }}` - 
-
-
 * `server` - 
 
 
