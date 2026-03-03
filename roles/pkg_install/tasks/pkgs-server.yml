@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Import Server Package Variables
+  ansible.builtin.include_vars: pkgs-server.yml
+
+- name: Bind9 (DNS) Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkg.bind9
+    tasks_from: bind9-install.yml
+  when: pkgs_server.install.bind9
+
+- name: DHCPD (DHCP) Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkg.dhcpd
+    tasks_from: dhcpd-install.yml
+  when: pkgs_server.install.dhcpd
+
+- name: Firewalld Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkg.firewalld
+    tasks_from: firewalld-install.yml
+  when: pkgs_server.install.firewalld
+
+- name: Mdadm (Raid) Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkg.mdadm
+    tasks_from: mdadm-install.yml
+  when: pkgs_server.install.mdadm
+
+- name: OpenLdap (LDAP) Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkg.openldap
+    tasks_from: openldap-install.yml
+  when: pkgs_server.install.openldap
+
+- name: Samba Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkg.samba
+    tasks_from: samba-install.yml
+  when: pkgs_server.install.samba
+
+- name: VSFTP (FTP) Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkg.vsftp
+    tasks_from: vsftp-install.yml
+  when: pkgs_server.install.vsftp
+
+- name: Webmin Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkg.webmin
+    tasks_from: debian-webmin.yml
+  when: pkgs_server.install.webmin

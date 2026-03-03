@@ -3,8 +3,8 @@
 ---
 - name: Collect running user facts
   ansible.builtin.include_role:
-    name: pkg-install
-    tasks_from: utilities/sudo_user_facts.yml
+    name: jcook3701.utils.general
+    tasks_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
 - name: Set global Git username
