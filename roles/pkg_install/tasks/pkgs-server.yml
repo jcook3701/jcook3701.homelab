@@ -8,46 +8,46 @@
   ansible.builtin.include_role:
     name: jcook3701.pkg.bind9
     tasks_from: bind9-install.yml
-  when: pkgs_server.install.bind9
+  when: pkg_install_server.install.bind9
 
 - name: DHCPD (DHCP) Install
   ansible.builtin.include_role:
     name: jcook3701.pkg.dhcpd
     tasks_from: dhcpd-install.yml
-  when: pkgs_server.install.dhcpd
+  when: pkg_install_server.install.dhcpd
 
 - name: Firewalld Install
   ansible.builtin.include_role:
     name: jcook3701.pkg.firewalld
     tasks_from: firewalld-install.yml
-  when: pkgs_server.install.firewalld
+  when: pkg_install_server.install.firewalld
 
 - name: Mdadm (Raid) Install
   ansible.builtin.include_role:
     name: jcook3701.pkg.mdadm
     tasks_from: mdadm-install.yml
-  when: pkgs_server.install.mdadm
+  when: pkg_install_server.install.mdadm
 
 - name: OpenLdap (LDAP) Install
   ansible.builtin.include_role:
     name: jcook3701.pkg.openldap
     tasks_from: openldap-install.yml
-  when: pkgs_server.install.openldap
+  when: pkg_install_server.install.openldap
 
 - name: Samba Install
   ansible.builtin.include_role:
     name: jcook3701.pkg.samba
     tasks_from: samba-install.yml
-  when: pkgs_server.install.samba
+  when: pkg_install_server.install.samba
 
 - name: VSFTP (FTP) Install
   ansible.builtin.include_role:
     name: jcook3701.pkg.vsftp
     tasks_from: vsftp-install.yml
-  when: pkgs_server.install.vsftp
+  when: pkg_install_server.install.vsftp
 
 - name: Webmin Install
   ansible.builtin.include_role:
     name: jcook3701.pkg.webmin
     tasks_from: debian-webmin.yml
-  when: pkgs_server.install.webmin
+  when: pkg_install_server.install.webmin

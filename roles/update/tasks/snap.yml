@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Snap Refresh
+  ansible.builtin.command:
+    cmd: snap refresh
+  register: snap_refresh_result
+  changed_when: "'All snaps up to date' not in snap_refresh_result.stderr"
+  become: true

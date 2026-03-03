@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-pkgs_software_development:
+pkg_install_software_development:
   install:
     nvm: true
     sdkman: true

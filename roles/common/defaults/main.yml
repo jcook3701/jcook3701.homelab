@@ -29,6 +29,8 @@ common_vars:
 
   editor_bashrc: "nano"
 
+  ssh_private_key: /root/.ssh/id_rsa
+
   github:
     username: "jcook3701"
     email: "jcook3701@gmail.com"

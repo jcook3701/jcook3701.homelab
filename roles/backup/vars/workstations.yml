@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-source_dir: "/"
-source_path: "{{ source_dir }}"
-dest_server: "modern-times"
-dest_dir: "/media/raid10/samba_shares/samba_backup_share/rdiff-backups/{{ inventory_hostname_short }}"
-# dest_path: - Set in role task
+backup_server: "modern-times"
+
+backup_source_dir: "/"
+backup_dest_dir: "/media/raid10/samba_shares/samba_backup_share/rdiff-backups/{{ inventory_hostname_short }}"

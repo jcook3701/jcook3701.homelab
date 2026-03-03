@@ -3,24 +3,24 @@
 ---
 - name: Install Common Packages
   ansible.builtin.include_tasks: pkgs-common.yml
-  when: pkg_group.pkgs_common
+  when: pkg_install_conf.pkgs_common
 
 - name: Installing Extra Packages
   ansible.builtin.include_tasks: pkgs-extras.yml
-  when: pkg_group.pkgs_extras
+  when: pkg_install_conf.pkgs_extras
 
 - name: Installing GUI Packages
   ansible.builtin.include_tasks: pkgs-gui.yml
-  when: pkg_group.pkgs_gui
+  when: pkg_install_conf.pkgs_gui
 
 - name: Installing Server Packages
   ansible.builtin.include_tasks: pkgs-server.yml
-  when: pkg_group.pkgs_server
+  when: pkg_install_conf.pkgs_server
 
 - name: Installing Software Development Packages
   ansible.builtin.include_tasks: pkgs-software-development.yml
-  when: pkg_group.pkgs_software_development
+  when: pkg_install_conf.pkgs_software_development
 
 - name: Installing Software Library Packages
   ansible.builtin.include_tasks: pkgs-software-libs.yml
-  when: pkg_group.pkgs_software_libs
+  when: pkg_install_conf.pkgs_software_libs

@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Initialize cron_job variable
+  block:
+    - name: Create cron_job variable.
+      ansible.builtin.set_fact:
+        cron_job: null
+
+    - name: Set the local 'autobuild_git_repo' variable within the autobuild variable
+      ansible.builtin.set_fact:
+        cron_job:
+          title: "{{ cron_jobs_conf.role }} {{ cron_jobs_conf.hosts }}"
+          time: "{{ cron_jobs_conf.hour }}:{{ cron_jobs_conf.minute }}"
+          minute: "{{ cron_jobs_conf.minute }}"
+          hour: "{{ cron_job.hour }}"
+          name: "{{ cron_jobs_conf.role }}_{{ cron_jobs_conf.hosts }}_cron_job"
+          job: "ansible-playbook /etc/ansible/playbooks/{{ script }}{{ ' --tags ' + tags if tags is defined else '' }}"
+          file: "ansible_{{ hosts }}-auto-{{ role }}"
+
+      when: git_repo is defined

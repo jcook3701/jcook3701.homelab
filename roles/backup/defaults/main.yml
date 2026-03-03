@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+backup_conf:
+  source_dir: "/"
+  dest_dir: "/backup/rdiff-backups/{{ inventory_hostname_short }}"
+
+  dest_server: "backup-server"
+  # dest_path: - Set in role task

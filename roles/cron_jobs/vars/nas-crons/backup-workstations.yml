@@ -1,10 +1,12 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-role: backup
-hosts: workstations
-script: "/backup/backup-workstations.yml"
-tags: workstation
+cron_jobs_conf:
+  role: backup
+  hosts: workstations
 
-hour: 4
-minute: 30
+  script: "/backup/backup-workstations.yml"
+  tags: workstation
+
+  hour: 4
+  minute: 30

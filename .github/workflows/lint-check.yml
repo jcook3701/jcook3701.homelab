@@ -49,6 +49,10 @@ jobs:
         run: |
           make yaml-lint-check  # Check formatting with yamllint
 
+      - name: Run j2lint Lint Check
+        run: |
+          make j2-lint-check  # Check formatting with j2lint
+
       - name: Run Ansible Lint Check
         run: |
           make ansible-lint-check  # Check formatting with ansible-lint

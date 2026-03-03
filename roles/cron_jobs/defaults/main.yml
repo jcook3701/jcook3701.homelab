@@ -2,11 +2,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
 cron_jobs_conf:
-  role: backup
-  hosts: nas
+  role: update
+  hosts: workstations
 
-  script: "/backup/backup-server.yml"
-  tags: server
+  scripts: "/update/update-workstations.yml"
 
   hour: 4
   minute: 30

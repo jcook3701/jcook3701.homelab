@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Initialize rdiff-backup variables
+  block:
+
+    - name: Create rdiff-backup destination path variable.
+      ansible.builtin.set_fact:
+        backup_dest_path: "{{ ansible_env.USER }}@{{ backup_server }}::{{ backup_dest_dir }}"
+
+    - name: Debug task - Print - backup_dest_path variable
+      tags: [never, debug]
+      ansible.builtin.debug:
+        var: backup_dest_path
+
+    - name: Initialize excludes options variable
+      ansible.builtin.set_fact:
+        backup_exclude_options: ""
+
+    - name: Generate excludes options variable from exclude list variable
+      ansible.builtin.set_fact:
+        backup_exclude_options: "{{ backup_exclude_options }} --exclude '{{ item }}'"
+      loop: "{{ backup_exclude }}"
+
+    - name: Debug task - Print - backup_exclude_options variable
+      tags: [never, debug]
+      ansible.builtin.debug:
+        var: backup_exclude_options
+
+# Output:
+#   * backup_dest_path
+#   * backup_exclude_options

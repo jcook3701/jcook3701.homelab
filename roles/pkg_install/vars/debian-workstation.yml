@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-pkg_group:
+pkg_install_group:
   pkgs_common: true
   pkgs_extras: true
   pkgs_gui: true

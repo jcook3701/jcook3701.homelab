@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Update all installed Flatpak applications
+  ansible.builtin.command:
+    cmd: flatpak update -y --noninteractive
+  register: flatpak_update
+  changed_when: "'Nothing to do' not in flatpak_update.stdout"
+  become: true

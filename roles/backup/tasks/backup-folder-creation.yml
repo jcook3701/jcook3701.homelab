@@ -5,17 +5,17 @@
   tags: [never, server, workstation]
   block:
     - name: >-
-          Make {{ inventory_hostname_short }} backup directory {{ dest_dir }} on {{ dest_server }}.
+          Make {{ inventory_hostname_short }} backup directory {{ backup_dest_dir }} on {{ backup_server }}.
       ansible.builtin.file:
-        path: "{{ dest_dir }}"
+        path: "{{ backup_dest_dir }}"
         state: directory
         mode: "0755"
-      delegate_to: "{{ dest_server }}"
+      delegate_to: "{{ backup_server }}"
 
     - name: Make individual backup directories for each included root directory
       ansible.builtin.file:
-        path: "{{ dest_dir }}/{{ inventory_hostname_short }}{{ item | regex_replace('\\/', '-') }}"
+        path: "{{ backup_dest_dir }}/{{ inventory_hostname_short }}{{ item | regex_replace('\\/', '-') }}"
         state: directory
         mode: "0775"
       loop: "{{ include }}"
-      delegate_to: "{{ dest_server }}"
+      delegate_to: "{{ backup_server }}"

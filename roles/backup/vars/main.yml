@@ -1,20 +1,27 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-ansible_ssh_private_key_file: /root/.ssh/id_rsa
-rdiff_script_path: "/usr/local/bin/rdiff-backup-script.sh"
+backup_rdiff_script_path: "/usr/local/bin/rdiff-backup-script.sh"
 
-log_filename: "{{ inventory_hostname_short }}-backup.log"
-log_dir_path: "/var/log/backup-logs"
-log_file_path: "{{ log_dir_path }}/{{ log_filename }}"
+backup_log_filename: "{{ inventory_hostname_short }}-backup.log"
+backup_log_dir_path: "/var/log/backup-logs"
+backup_log_file_path: "{{ backup_log_dir_path }}/{{ backup_log_filename }}"
 
-flags: "-v5 --print-statistics --exclude-sockets --exclude-device-files --exclude-fifos"
+backup_flags: "-v5 --print-statistics --exclude-sockets --exclude-device-files --exclude-fifos"
 
 # directories to include/exclude during the rdiff-backup
-include:
-  ["/boot", "/etc", "/home", "/opt", "/root", "/srv", "/usr/local", "/var"]
-exclude:
-  [
+backup_include: [
+    "/boot",
+    "/etc",
+    "/home",
+    "/opt",
+    "/root",
+    "/srv",
+    "/usr/local",
+    "/var"
+]
+
+backup_exclude: [
     "/bin",
     "/lib",
     "/lib64",
@@ -33,4 +40,4 @@ exclude:
     "/var/cache",
     "/var/tmp",
     "**",
-  ]
+]
