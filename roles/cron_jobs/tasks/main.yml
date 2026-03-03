@@ -4,7 +4,7 @@
 # call with to create cron:
 # (sudo rights are required to create cron-job.)
 
-# Inlcude variables should not be in block otherwise variables are inherited
+# Include variables should not be in block otherwise variables are inherited
 - name: Include cron-job variables
   ansible.builtin.include_tasks:
     file: include_vars.yml

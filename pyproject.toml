@@ -166,7 +166,7 @@ skip = [
 ]
 
 # words to ignore globally
-ignore-words-list = ["crate", "ba"]
+ignore-words-list = ["alis", "crate", "ba"]
 
 # extra options
 check-filenames = true

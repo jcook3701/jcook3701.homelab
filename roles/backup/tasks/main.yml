@@ -3,14 +3,14 @@
 ---
 # TODO: Test if Ansible is installed on each computer that needs to be backed up.
 # TODO: Install Ansible on machines that are missing it.
-- name: Server backup preperation tasks
+- name: Server backup preparation tasks
   tags: [never, server]
   block:
     - name: Include server variable files
       ansible.builtin.include_vars:
         file: nas.yml
 
-- name: Workstation backup preperation tasks
+- name: Workstation backup preparation tasks
   tags: [never, workstation]
   block:
     - name: Include workstation variable files

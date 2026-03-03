@@ -10,7 +10,7 @@ log_file_path: "{{ log_dir_path }}/{{ log_filename }}"
 
 flags: "-v5 --print-statistics --exclude-sockets --exclude-device-files --exclude-fifos"
 
-# directories to include/exclude durring the rdiff-backup
+# directories to include/exclude during the rdiff-backup
 include:
   ["/boot", "/etc", "/home", "/opt", "/root", "/srv", "/usr/local", "/var"]
 exclude:

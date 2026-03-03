@@ -33,6 +33,7 @@
         "pyproject",
         "pytest",
         "pyupgrade",
+        "rdiff",
         "rpmnew",
         "rustc",
         "streetsidesoftware",
