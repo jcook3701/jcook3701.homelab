@@ -7,18 +7,13 @@
     tasks_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
-- name: Set global Git username
+- name: Configure global Git settings
   become: true
   become_user: "{{ sudo_user }}"
-  ansible.builtin.git_config:
-    name: user.name
-    value: "{{ github.username }}"
+  community.general.git_config:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
     scope: global
-
-- name: Set global Git email address
-  become: true
-  become_user: "{{ sudo_user }}"
-  ansible.builtin.git_config:
-    name: user.email
-    value: "{{ github.email }}"
-    scope: global
+  loop:
+    - { name: "user.name", value: "{{ github.username }}" }
+    - { name: "user.email", value: "{{ github.email }}" }

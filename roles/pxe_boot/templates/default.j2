@@ -1,3 +1,24 @@
+{#
+# default.j2 for jcook3701.homelab
+#
+# SPDX-FileCopyrightText: Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% macro menu() %}
 default menu.c32
 prompt 0
 timeout 600
@@ -66,3 +87,4 @@ LINUX /networkboot/x86_64/archlinux2023.06.01/vmlinuz-linux
 INITRD networkboot/x86_64/archlinux2023.06.01/amd-ucode.img,networkboot/x86_64/archlinux2023.06.01/intel-ucode.img,networkboot/x86_64/archlinux2023.06.01/initramfs-linux.img
 APPEND ip=:::::eth0:dhcp archisobasedir=arch archiso_nfs_srv=192.168.1.2:/var/ftp/pub/x86_64/archlinux2023.06.01 cms_verify=y script=ftp://modern-times.jcook3701.com/pub/kickstart/archlinux2023.06.01/alis/alis_startup.sh
 SYSAPPEND 3
+{% endmacro %}

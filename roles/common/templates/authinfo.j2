@@ -1,11 +1,35 @@
+{#
+# authinfo.j2 for jcook3701.homelab
+#
+# SPDX-FileCopyrightText: Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% macro authinfo() %}
 machine api.github.com login {{ github.username }}^grip password {{ vault.github_pat_token }}
 machine api.github.com login {{ github.username }}^forge password {{ vault.github_pat_token }}
 machine openai.com password {{ vault.openai_token }}
 
 {# TODO: This should loop through email accounts and add all of them #}
-machine imap.gmail.com login {{ }}  password {{ vault.google_token }}
-machine smtp.gmail.com login {{ }} password {{ }}
+machine imap.gmail.com login {#TODO: variable here #}   password {{ vault.google_token }}
+machine smtp.gmail.com login {#TODO variable here #} password {#TODO variable here #}
 
 {# TODO: This should loop through calendars and add all of them #}
-machine apidata.googleusercontent.com login {{ }} password {{ vault.google_token }}
-machine apidata.googleusercontent.com login {{ }} password {{ vault.google_token }}
+machine apidata.googleusercontent.com login {#TODO variable here #} password {{ vault.google_token }}
+machine apidata.googleusercontent.com login {#TODO variable here #} password {{ vault.google_token }}
+{% endmacro %}
+
+{{- authinfo() }}

@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-
 pxe_boot_dirs:
   ks_dir: /data/www/html/ks
   menu_dir: /var/lib/tftpboot/pxelinux.cfg/
