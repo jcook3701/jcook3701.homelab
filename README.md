@@ -14,6 +14,18 @@
 
 <p>Ansible Home Lab automation.  Quickly gettup servers and workstations setup.</p>
 
+<p><strong>Utilizes:</strong><br />
+The <strong>homelab</strong> depends on the following repositories for its documentation and sub-features.</p>
+
+<ul>
+  <li><strong><a href="https://github.com/jcook3701/jcook3701.docker">jcook3701.docker</a></strong> Ansible Galaxy collection used to install docker packages.</li>
+  <li><strong><a href="https://github.com/jcook3701/jcook3701.flatpak">jcook3701.flatpak</a></strong> Ansible Galaxy collection used to install flatpak packages.</li>
+  <li><strong><a href="https://github.com/jcook3701/jcook3701.pkgs">jcook3701.pkgs</a></strong> Ansible Galaxy collection used to install system (Debian, Ubuntu, RHEL) packages.</li>
+  <li><strong><a href="https://github.com/jcook3701/jcook3701.snap">jcook3701.snap</a></strong> Ansible Galaxy collection used to install snap packages.</li>
+  <li><strong><a href="https://github.com/jcook3701/jcook3701.source">jcook3701.source</a></strong> Ansible Galaxy collection used to install packages from source code.</li>
+  <li><strong><a href="https://github.com/jcook3701/jcook3701.utils">jcook3701.utils</a></strong> Ansible Galaxy collection of utilities for assisting automation processes.</li>
+</ul>
+
 <hr />
 
 <p>🛠️ <strong>CI/CD Check List:</strong></p>

@@ -9,6 +9,16 @@
 
 {{ site.description }}  
 
+**Utilizes:**  
+The **{{ site.title }}** depends on the following repositories for its documentation and sub-features.  
+
+* **[jcook3701.docker](https://github.com/jcook3701/jcook3701.docker)** Ansible Galaxy collection used to install docker packages.
+* **[jcook3701.flatpak](https://github.com/jcook3701/jcook3701.flatpak)** Ansible Galaxy collection used to install flatpak packages.
+* **[jcook3701.pkgs](https://github.com/jcook3701/jcook3701.pkgs)** Ansible Galaxy collection used to install system (Debian, Ubuntu, RHEL) packages.
+* **[jcook3701.snap](https://github.com/jcook3701/jcook3701.snap)** Ansible Galaxy collection used to install snap packages.
+* **[jcook3701.source](https://github.com/jcook3701/jcook3701.source)** Ansible Galaxy collection used to install packages from source code.
+* **[jcook3701.utils](https://github.com/jcook3701/jcook3701.utils)** Ansible Galaxy collection of utilities for assisting automation processes.
+
 ***
 
 🛠️ **CI/CD Check List:**
