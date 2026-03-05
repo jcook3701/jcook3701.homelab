@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+pkg_install_software_development:
+  install:
+    nvm: true
+    sdkman: true
+    ros2: true
+
+    # TODO: Add pkgs to all install groups and stup task to install all packages
+    pkgs:
+      apt: [
+        direnv,
+        cookiecutter,
+      ]
+      dnf: []
+      pacman: []
+
+  pkgs_source:
+    install:
+      cmake: true

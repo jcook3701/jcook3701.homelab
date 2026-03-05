@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Installing Terminus Fonts.
+  ansible.builtin.apt:
+    pkg:
+      - fonts-terminus-otb
+      - fonts-terminus
+    state: present

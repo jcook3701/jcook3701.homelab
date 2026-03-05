@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Setup pxeboot server
+  hosts: localhost
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Setup pxeboot server
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.pxeboot

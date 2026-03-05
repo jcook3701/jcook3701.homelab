@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Import GUI Package Variables
+  ansible.builtin.include_vars: pkgs-gui.yml
+
+- name: Installing GUI Packages with apt-get
+  ansible.builtin.apt:
+    pkg:
+      - xfce4
+      - i3
+    state: present

@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Install default packages for RHEL Server
+  ansible.builtin.import_tasks: redhat-server.yml
+  when: ansible_facts['os_family']|lower == 'redhat'
+  tags: [never, server]
+
+- name: Install all packages for Debian Server
+  ansible.builtin.import_tasks: debian-server.yml
+  when: ansible_facts['distribution']|lower == 'debian'
+  tags: [never, server]
+
+- name: Install all packages for Debian Workstation
+  ansible.builtin.import_tasks: debian-workstation.yml
+  when: ansible_facts['distribution']|lower == 'debian'
+  tags: [never, workstation]
+
+- name: Install all packages for Debian Workstation
+  ansible.builtin.import_tasks: debian-workstation.yml
+  when: ansible_facts['distribution']|lower == 'ubuntu'
+  tags: [never, workstation]

@@ -1,0 +1,143 @@
+#!/bin/bash
+
+#########################################################################################
+# Example:
+#   ./backup.sh --source-path "$DEST" --dest-path "$USER@$HOST:$DEST" --log-path "$DEST"
+#########################################################################################
+# This is an example backing up NAS server to remote machine.
+#
+# Local Example:
+#   ./backup.sh  --source-path "/"  --dest-path "root@stone::/backups/modern-times-backup" \
+#     --log-file-path "/var/log/backup-logs/modern-times-backup.log"
+#########################################################################################
+# This is an example of backing up workstation to NAS server.
+#
+# Example:
+#   ./backup.sh  --source-path "" --dest-path "" \
+#     --log-file-path "/home/jcook/.backup-logs/modern-times-backup.log"
+#########################################################################################
+
+## TODO: Split rdiff command so that home directory is backed-up separately than the other directories
+
+# CLI argument parsing based on: https://stackoverflow.com/a/14203146/11063709
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -s|--source-path)
+      SOURCE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -d|--dest-path)
+      DESTINATION="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -l|--log-file-path)
+      LOG_FILE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1") # save positional arg
+      shift # past argument
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+# Exit gracefully if source or default arguments are empty.
+if [ -z "${SOURCE}" ]; then
+   echo "The source directory needs to be set for this script to work."
+   exit
+fi
+
+if [ -z "${DESTINATION}" ]; then
+   echo "Destination directory needs to be set for this script to work."
+   exit
+fi
+
+# Define default log file directory.
+if [ -z "${LOG_FILE}" ]; then
+   echo "Log file directory needs to be set for this script to work."
+   exit
+fi
+
+# Current time
+DATE_TIME="`date "+%Y-%m-%d %H:%M:%S"`"
+
+# default flag
+FLAGS="-v5 --print-statistics --exclude-sockets --exclude-device-files --exclude-fifos"
+
+# Include list
+INCLUDE=(
+  "/boot"
+  "/etc"
+  "/home"
+  "/opt"
+  "/root"
+  "/srv"
+  "/usr/local"
+  "/var"
+)
+
+# Construct include options
+# INCLUDE_OPTIONS=""
+# for include_dir in "${INCLUDE[@]}"; do
+#     INCLUDE_OPTIONS="$INCLUDE_OPTIONS --include $include_dir"
+# done
+
+# Exclude list
+EXCLUDE=(
+    "/bin"
+    "/lib"
+    "/lib64"
+    "/sbin"
+    "/dev"
+    "/lost+found"
+    "/media"
+    "/mnt"
+    "/proc"
+    "/run"
+    "/sys"
+    "/tmp"
+    "/usr"
+    "/var/run"
+    "/var/cache"
+    "/var/tmp"
+    "**"
+)
+
+# Construct exclude options
+EXCLUDE_OPTIONS=""
+for exclude_dir in "${EXCLUDE[@]}"; do
+    EXCLUDE_OPTIONS="${EXCLUDE_OPTIONS} --exclude ${exclude_dir}"
+done
+
+# Run rdiff-backup
+echo "rdiff-backup started at ${DATE_TIME}:" >> $LOG_FILE
+
+INCLUDE_OPTION=""
+HOSTNAME=""
+FINAL_BACKUP_DESTINATION=""
+BACKUP_FOLDER_NAME=""
+for include_dir in "${INCLUDE[@]}"; do
+    INCLUDE_OPTION=" --include ${include_dir}"
+    HOSTNAME=$(echo $DESTINATION | sed 's:.*/::') # Get everything after last /
+    BACKUP_FOLDER_NAME=${include_dir//\//-} # Replace '/' with '-'
+    FINAL_BACKUP_DESTINATION="${DESTINATION}/${HOSTNAME}${BACKUP_FOLDER_NAME}"
+    echo $FLAGS $INCLUDE_OPTION $EXCLUDE_OPTIONS $SOURCE $FINAL_BACKUP_DESTINATION >> $LOG_FILE 2>&1
+done
+
+# rdiff-backup $FLAGS $EXCLUDE_OPTIONS $SOURCE $DESTINATION
+
+# sudo rdiff-backup -v5 --print-statistics --exclude-sockets --exclude-device-files --exclude-fifos --exclude /dev --exclude /media --exclude /mnt --exclude /proc --exclude /run --exclude /sys --exclude /tmp / jcook@stone::/opt/backups/modern-times-backup
+
+# >> /home/jcook/.backup-logs/modern-times-backup.log 2>&1
+# ulimit -n

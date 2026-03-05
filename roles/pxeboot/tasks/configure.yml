@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# - name: Generate Unattended Kickstart Installation Files
+#  vars_files: vault.yml
+#  roles:
+#  - common
+#  template:
+#    src: templates/
+#    dest:
+#  with_items:
+#  when:
+
+# - name: Generate PXE Files
+#  template:
+#  roles:
+#  - common
+#    src: templates/
+#    dest:
+#  with_items:
+#  when:

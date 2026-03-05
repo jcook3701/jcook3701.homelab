@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+pkg_install_software_libs:
+  pkgs_source:
+    install:
+      libel: true
+      libportal: true
+      qtbase: true
+      tree_sitter: true

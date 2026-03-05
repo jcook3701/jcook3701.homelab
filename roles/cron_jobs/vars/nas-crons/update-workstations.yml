@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+cron_jobs_role: update
+cron_jobs_hosts: workstations
+
+cron_jobs_script: "/update/update-workstations.yml"
+cron_jobs_tags: workstation
+
+cron_jobs_hour: 4
+cron_jobs_minute: 30

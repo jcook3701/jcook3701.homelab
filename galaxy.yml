@@ -34,8 +34,12 @@ tags:
   - infrastructure
 
 dependencies:
-  # jcook3701.pkgs: "*"
-  # jcook3701.utils: "*"
+  jcook3701.docker: ">=1.0.0"
+  jcook3701.flatpak: ">=1.0.0"
+  jcook3701.pkgs: ">=1.0.0"
+  jcook3701.snap: ">=1.0.0"
+  jcook3701.source: "1.0.0"
+  jcook3701.utils: ">=1.0.0"
   community.general: ">=12.0.0"
 
 build_ignore:

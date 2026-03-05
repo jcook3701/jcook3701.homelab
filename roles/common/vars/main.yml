@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+  # NOTE: Conversations between ansible's ansible_architecture variable and debian architecture names.
+common_deb_architecture:
+  {
+    "armv6l": "armhf",
+    "armv7l": "armhf",
+    "aarch64": "arm64",
+    "x86_64": "amd64",
+    "i386": "i386",
+  }
+
+  # NOTE: New providers need to be appended here and within the library module.
+common_git_providers:
+  {
+    "github": "https://github.com/",
+    "gitlab": "https://gitlab.com/",
+    "gitlab-freedesktop": "https://gitlab.freedesktop.org/",
+    "git-savannah": "https://git.savannah.gnu.org/",
+  }
+
+common_bash_export_types:
+  {
+    "lib": "LD_LIBRARY_PATH",
+    "bin": "PATH"
+  }
+
+common_editor_bashrc: "nano"
+
+common_github:
+  username: "jcook3701"
+  email: "jcook3701@gmail.com"
+
+  # NOTE: This could probably be removed and instances where this would be used replaced with {{ sudo_user }}
+common_service_groups_users:
+  - "jcook"
+
+common_public_key_path: "~/.ssh/id_rsa.pub"
+
+common_build_paths:
+  # NOTE: Following paths are absolute paths
+  install_path: "/opt/ansible-package-manager"
+
+  # NOTE: Following paths are relative paths from running user home directory
+  home: ".source-builds" # main package build directory
+  pkg_store: ".pkg-store" # where built packages will be stored

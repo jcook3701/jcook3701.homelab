@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Import Extras Package Variables
+  ansible.builtin.include_vars: pkgs-extras.yml
+
+- name: Installing Extra Packages with apt-get
+  ansible.builtin.apt:
+    pkg:
+      - sl
+      - cowsay
+      - fortune
+    state: present
+
+# TODO:
+# - name: Lutris Install
+#  ansible.builtin.include_tasks:

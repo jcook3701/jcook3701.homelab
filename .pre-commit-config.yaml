@@ -33,6 +33,13 @@ repos:
           - ansible-core<2.16
           - ansible
 
+  - repo: https://github.com/aristanetworks/j2lint
+    rev: v1.1.0
+    hooks:
+      - id: j2lint
+        stages: [manual]
+        args: ["--ignore", "jinja-statements-indentation", "--"]
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:

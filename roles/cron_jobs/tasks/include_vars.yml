@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: NAS Server cron-job variables
+  block:
+    - name: Update workstations cron-job.
+      ansible.builtin.include_vars:
+        file: nas-crons/update-workstations.yml
+      register: included_reg
+      tags: [never, update-workstations]
+
+    - name: Backup workstations cron-job.
+      ansible.builtin.include_vars:
+        file: nas-crons/backup-workstations.yml
+      register: included_reg
+      tags: [never, backup-workstations]
+
+    - name: Backup nas server cron-job.
+      ansible.builtin.include_vars:
+        file: nas-crons/backup-nas.yml
+      register: included_reg
+      tags: [never, backup-nas]
+# TODO: Add block here for workstations-cron variables

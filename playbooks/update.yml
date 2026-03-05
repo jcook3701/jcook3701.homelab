@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# call for example with:
+# ansible-playbook update-workstations.yml
+#   This is used to update workstations
+# (sudo rights are required to update packages)
+
+- name: Update all packages for host workstations.
+  hosts: localhost
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Import update role.
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.update
+  # register: result
+
+# - name: Print return information from the previous task
+#  ansible.builtin.debug:
+#    var: result
+#    verbosity: 2

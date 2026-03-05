@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Create Cron-Job Block.
+  tags: [never, create-cron]
+  block:
+    - name: "Create cron-job to {{ cron_job.title }} at {{ cron_job.time }}."
+      ansible.builtin.cron:
+        name: "{{ cron_job.name }}"
+        minute: "{{ cron_job.minute }}"
+        hour: "{{ cron_job.hour }}"
+        user: root
+        job: "{{ cron_job.job }}"
+        cron_file: "{{ cron_job.file }}"
+        state: present
+
+- name: Remove Cron-Job Block.
+  tags: [never, remove-cron]
+  block:
+    - name: "Delete cron-job that is used to {{ cron_job.title }} at {{ cron_job.time }}."
+      ansible.builtin.cron:
+        name: "{{ cron_job.name }}"
+        cron_file: "{{ cron_job.file }}"
+        state: absent

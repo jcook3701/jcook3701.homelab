@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# This is used to backup modern-times to stone.
+# example call with:
+# ansible-playbook backup-server.yml --tags "server"
+# ansible-playbook backup-server.yml --tags "server,debug"
+# ansible-playbook backup-server.yml --tags "clear-logs"
+
+# (sudo rights are required to backup packages)
+- name: NAS server ansible backup tasks.
+  hosts: nas
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Backup NAS server with rdiff-backup
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.backup
+      tags: [server]
+
+    - name: Clear NAS server logs
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.backup
+      tags: [clear-logs]

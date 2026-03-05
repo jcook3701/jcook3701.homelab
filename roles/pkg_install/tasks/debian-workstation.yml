@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Debian Workstation Base Install
+  block:
+    - name: Import default Debian Workstation Variables
+      ansible.builtin.include_vars: debian-workstation.yml
+
+    - name: Installing Debian Workstation Packages
+      ansible.builtin.include_tasks: pkgs-all.yml

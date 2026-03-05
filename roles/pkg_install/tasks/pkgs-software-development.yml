@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Import Software Development Package Variables
+  ansible.builtin.include_vars: pkgs-software-development.yml
+
+- name: Installing Software Development Packages with apt-get
+  ansible.builtin.apt:
+    pkg:
+      - build-essential
+      - git
+      - autoconf
+      - automake
+      - gdb
+      - ruby
+      - golang
+    state: present

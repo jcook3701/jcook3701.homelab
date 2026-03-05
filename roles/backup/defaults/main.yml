@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+backup_rdiff_script_path: "/usr/local/bin/rdiff-backup-script.sh"
+
+backup_log_filename: "{{ inventory_hostname_short }}-backup.log"
+backup_log_dir_path: "/var/log/backup-logs"
+backup_log_file_path: "{{ backup_log_dir_path }}/{{ backup_log_filename }}"
+
+backup_flags: "-v5 --print-statistics --exclude-sockets --exclude-device-files --exclude-fifos"
+
+# directories to include/exclude during the rdiff-backup
+backup_include: [
+    "/boot",
+    "/etc",
+    "/home",
+    "/opt",
+    "/root",
+    "/srv",
+    "/usr/local",
+    "/var"
+]
+
+backup_exclude: [
+    "/bin",
+    "/lib",
+    "/lib64",
+    "/sbin",
+    "/dev",
+    "/lost+found",
+    "/media",
+    "/mnt",
+    "/proc",
+    "/run",
+    "/sys",
+    "/tmp",
+    "/usr",
+    "/var/log",
+    "/var/run",
+    "/var/cache",
+    "/var/tmp",
+    "**",
+]
+
+backup_server: "backup-server"
+backup_source_dir: "/"
+backup_dest_dir: "/backups/{{ inventory_hostname_short }}"

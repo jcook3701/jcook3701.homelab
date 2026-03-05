@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Manage pcspkr module
+  hosts: localhost
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Turn off pc speakers
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.common
+        tasks_from: turn-off-pc-speaker.yml
