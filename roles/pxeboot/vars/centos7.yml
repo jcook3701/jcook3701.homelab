@@ -1,15 +1,15 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-pxe_boot_dirs:
+pxeboot_dirs:
   ks_dir: /data/www/html/ks
   menu_dir: /var/lib/tftpboot/pxelinux.cfg/
 
-pxe_boot_urls:
+pxeboot_urls:
   repo_url: "http://repo.lan.nathancurry.com/repo/centos7-base"
   ks_url: "http://repo.lan.nathancurry.com/ks"
 
-pxe_boot_conf:
+pxeboot_conf:
 
   boot_distro: "centos7-1804"
 

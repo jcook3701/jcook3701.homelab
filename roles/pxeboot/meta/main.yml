@@ -9,7 +9,7 @@ galaxy_info:
   license: "AGPL-3.0-or-later"
 
   min_ansible_version: ">=2.10"
-  role_name: pxe_boot
+  role_name: pxeboot
 
   platforms:
     - name: EL

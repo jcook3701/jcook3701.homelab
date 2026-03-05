@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Install pxeboot dependencies
+  ansible.builtin.include_tasks: install.yml
+
+- name: Configure pxeboot
+  ansible.builtin.include_tasks: configure.yml

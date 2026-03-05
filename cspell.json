@@ -37,6 +37,7 @@
         "pkgs",
         "pipaudit",
         "pip-audit",
+        "pxeboot",
         "pyproject",
         "pytest",
         "pyupgrade",

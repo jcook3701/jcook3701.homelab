@@ -19,8 +19,8 @@
 #}
 
 {% macro authinfo() %}
-machine api.github.com login {{ github.username }}^grip password {{ vault.github_pat_token }}
-machine api.github.com login {{ github.username }}^forge password {{ vault.github_pat_token }}
+machine api.github.com login {{ common_github.username }}^grip password {{ vault.github_pat_token }}
+machine api.github.com login {{ common_github.username }}^forge password {{ vault.github_pat_token }}
 machine openai.com password {{ vault.openai_token }}
 
 {# TODO: This should loop through email accounts and add all of them #}
