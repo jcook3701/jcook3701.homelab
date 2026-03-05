@@ -43,7 +43,13 @@ jobs:
 
       - name: Run antsichaut
         run: |
-          antsichaut --token ${{ secrets.GITHUB_TOKEN }} --repo ${{ github.repository }}
+          # Get the latest tag to use as the starting version
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
+
+          antsichaut \
+            --github_token ${{ secrets.GITHUB_TOKEN }} \
+            --repository ${{ github.repository }} \
+            --since_version $LATEST_TAG
 
       - name: Commit and push changes
         run: |
