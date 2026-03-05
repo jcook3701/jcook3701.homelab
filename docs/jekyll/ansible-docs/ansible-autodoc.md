@@ -24,25 +24,25 @@ parent: jcook3701.homelab
 * `server` - 
 
 
+* `clear-logs` - 
+
+
+* `workstation` - 
+
+
 * `update-workstations` - 
 
 
-* `backup-workstations` - 
-
-
 * `backup-nas` - 
+
+
+* `backup-workstations` - 
 
 
 * `create-cron` - 
 
 
 * `remove-cron` - 
-
-
-* `workstation` - 
-
-
-* `clear-logs` - 
 
 
 * `debug` - 

@@ -1,9 +1,16 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
+- name: Check if snap command exists
+  ansible.builtin.command: which snap
+  register: snap_check
+  ignore_errors: true
+  changed_when: false
+
 - name: Snap Refresh
   ansible.builtin.command:
     cmd: snap refresh
   register: snap_refresh_result
   changed_when: "'All snaps up to date' not in snap_refresh_result.stderr"
   become: true
+  when: snap_check is succeeded

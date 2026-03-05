@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# This is used to backup all workstations to modern-times.
+# call for example with:
+# ansible-playbook backup-workstations.yml --tags workstation
+# ansible-playbook backup-workstations.yml --tags clear-logs
+# (sudo rights are required to backup packages)
+- name: Workstation ansible backup tasks.
+  hosts: workstations
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Backup workstations with rdiff-backup
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.backup
+      tags: [workstation]
+
+    - name: Clear workstation backup logs
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.backup
+      tags: [clear-logs]

@@ -1,11 +1,3 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-# TODO: DEAD VARS
-# pkgs_common: "{{ role_path }}/pkgs-common"
-# pkgs_extra: "{{ role_path }}/pkgs-extra"
-# pkgs_gui: "{{ role_path }}/pkgs-gui"
-# pkgs_server: "{{ role_path }}/pkgs-server"
-# pkgs_software_development: "{{ role_path }}/pkgs-software-development"
-# pkgs_software_libs: "{{ role_path }}/pkgs-software-libs"
-# utilities: "{{ role_path }}/utilities"

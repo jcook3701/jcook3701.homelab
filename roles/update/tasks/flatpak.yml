@@ -1,9 +1,16 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
+- name: Check if flatpak command exists
+  ansible.builtin.command: which flatpak
+  register: flatpak_check
+  ignore_errors: true
+  changed_when: false
+
 - name: Update all installed Flatpak applications
   ansible.builtin.command:
     cmd: flatpak update -y --noninteractive
   register: flatpak_update
   changed_when: "'Nothing to do' not in flatpak_update.stdout"
   become: true
+  when: flatpak_check is succeeded

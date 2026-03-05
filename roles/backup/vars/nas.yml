@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-backup_server: "stone"
+backup_server: "backup-workstation"
 
 backup_source_dir: "/"
 backup_dest_dir: "/backups/{{ inventory_hostname_short }}"

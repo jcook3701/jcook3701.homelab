@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# (sudo rights are required to backup packages)
+- name: Clear all rdiff-backup log files
+  hosts: [nas, workstations]
+  gather_facts: true
+  become: true
+  roles:
+    - jcook3701.homelab.backup
