@@ -1,0 +1,90 @@
+{#
+# default.j2 for jcook3701.homelab
+#
+# SPDX-FileCopyrightText: Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% macro menu() %}
+default menu.c32
+prompt 0
+timeout 600
+
+display boot.msg
+
+MENU TITLE jcook3701.com PXE Menu
+
+LABEL 1
+MENU LABEL ^1) Boot from local drive
+TEXT HELP
+This will exit from the network boot menu and attempt
+to boot from local media (hard disk, DVD, etc)
+ENDTEXT
+localboot 0
+
+LABEL 2
+MENU LABEL ^2) Boot into GParted Live 1.1.0-8 x86_64
+KERNEL networkboot/x86_64/gparted-live-1.1.0-8/vmlinuz
+APPEND initrd=networkboot/x86_64/gparted-live-1.1.0-8/initrd.img boot=live config components union=overlay username=user noswap noeject method=ftp://modern-times.jcook3701.com/pub/x86_64/gparted-live-1.1.0-8 fetch=ftp://modern-times.jcook3701.com/pub/x86_64/gparted-live-1.1.0-8/live/filesystem.squashfs
+
+LABEL 3
+MENU LABEL ^3) Boot into Clonezilla Live 3.0.3-22 x86_64
+KERNEL networkboot/x86_64/clonezilla-live-3.0.3-22/vmlinuz
+APPEND initrd=networkboot/x86_64/clonezilla-live-3.0.3-22/initrd.img boot=live config components union=overlay username=user noswap noeject method=ftp://modern-times.jcook3701.com/pub/x86_64/clonezilla-live-3.0.3-22 fetch=ftp://modern-times.jcook3701.com/pub/x86_64/clonezilla-live-3.0.3-22/live/filesystem.squashfs
+
+LABEL 4
+MENU LABEL ^4) Boot into Clonezilla Live 2.7.0-10 x86_64
+KERNEL networkboot/x86_64/clonezilla-live-2.7.0-10/vmlinuz
+APPEND initrd=networkboot/x86_64/clonezilla-live-2.7.0-10/initrd.img boot=live config components union=overlay username=user noswap noeject method=ftp://modern-times.jcook3701.com/pub/x86_64/clonezilla-live-2.7.0-10 fetch=ftp://modern-times.jcook3701.com/pub/x86_64/clonezilla-live-2.7.0-10/live/filesystem.squashfs
+
+LABEL 5
+MENU LABEL ^5) Install Alma Linux 8 x86_64
+KERNEL /networkboot/x86_64/alma-linux-8.5/vmlinuz
+APPEND initrd=/networkboot/x86_64/alma-linux-8.5/initrd.img ip=dhcp inst.repo=ftp://modern-times.jcook3701.com/pub/x86_64/alma-linux-8.5
+
+LABEL 6
+MENU LABEL ^6) Install Centos 7 x86_64
+KERNEL /networkboot/x86_64/centos7/vmlinuz
+APPEND initrd=/networkboot/x86_64/centos7/initrd.img method=ftp://modern-times.jcook3701.com/pub/x86_64/centos7
+
+LABEL 7
+MENU LABEL ^7) Install Centos 8 x68_64
+KERNEL /networkboot/x86_64/centos8/vmlinuz
+APPEND initrd=/networkboot/x86_64/centos8/initrd.img ip=dhcp inst.repo=ftp://modern-times.jcook3701.com/pub/x86_64/centos8
+
+LABEL 8
+MENU LABEL ^8) Install Ubuntu 16 x86_64
+KERNEL /networkboot/x86_64/ubuntu16/linux
+APPEND initrd=networkboot/x86_64/ubuntu16/initrd.gz method=ftp://modern-times.jcook3701.com/pub/x86_64/ubuntu16
+
+LABEL 9
+MENU LABEL ^9) Install Ubuntu 18 x86_64
+KERNEL /networkboot/x86_64/ubuntu18/linux
+APPEND initrd=networkboot/x86_64/ubuntu18/initrd.gz method=ftp://modern-times.jcook3701.com/pub/x86_64/ubuntu18
+
+LABEL 10
+MENU LABEL ^10) Install Ubuntu 20 x86_64
+KERNEL /networkboot/x86_64/ubuntu20/linux
+APPEND initrd=networkboot/x86_64/ubuntu20/initrd.gz method=ftp://modern-times.jcook3701.com/pub/x86_64/ubunt20
+
+LABEL 11
+MENU LABEL ^11) Install Arch Linux 2023.06.01 x86_64
+CONFIG /networkboot/x86_64/archlinux2023.06.01/archiso_pxe.cfg
+LINUX /networkboot/x86_64/archlinux2023.06.01/vmlinuz-linux
+INITRD networkboot/x86_64/archlinux2023.06.01/amd-ucode.img,networkboot/x86_64/archlinux2023.06.01/intel-ucode.img,networkboot/x86_64/archlinux2023.06.01/initramfs-linux.img
+APPEND ip=:::::eth0:dhcp archisobasedir=arch archiso_nfs_srv=192.168.1.2:/var/ftp/pub/x86_64/archlinux2023.06.01 cms_verify=y script=ftp://modern-times.jcook3701.com/pub/kickstart/archlinux2023.06.01/alis/alis_startup.sh
+SYSAPPEND 3
+{% endmacro %}

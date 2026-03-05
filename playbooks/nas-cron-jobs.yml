@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# Used to add/delete update cron-job from nas server.
+# call with:
+# ansible-playbook nas-cron-jobs.yml --tags "server,update-workstations,create-cron"
+# ansible-playbook nas-cron-jobs.yml --tags "server,update-workstations,remove-cron"
+- name: Workstations update add/delete cron-jobs.
+  hosts: localhost
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Create/Remove workstations update cron-job to run on NAS server
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.cron_jobs
+      tags: [update-workstations]
+
+    - name: Create/Remove nas backup cron-job to run on NAS server
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.cron_jobs
+      tags: [backup-nas]
+
+    - name: Create/Remove workstations backup cron-job to run on NAS server
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.cron_jobs
+      tags: [backup-workstations]

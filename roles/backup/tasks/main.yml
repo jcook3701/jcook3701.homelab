@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# TODO: Test if Ansible is installed on each computer that needs to be backed up.
+# TODO: Install Ansible on machines that are missing it.
+
+- name: Import Backup Variables
+  ansible.builtin.include_tasks: include.yml
+
+- name: Common server & workstation backup tasks
+  tags: [never, server, workstation]
+  block:
+    - name: Create backup folders on destination backup machine
+      ansible.builtin.include_tasks: backup-folder-creation.yml
+
+    - name: Create log directory
+      ansible.builtin.file:
+        path: "{{ backup_log_dir_path }}"
+        state: directory
+        mode: "0755"
+
+    - name: "{{ inventory_hostname_short }} rdiff-backup on {{ backup_server }}"
+      ansible.builtin.include_tasks: rdiff-backup.yml
+
+# Utility Tasks
+- name: Clear backup logs
+  tags: [never, clear-logs]
+  ansible.builtin.shell:
+    cmd: "echo '' > {{ backup_log_file_path }}"
+
+#  - name: Create workstation source path variable.
+#    ansible.builtin.set_fact:
+#      source_path: "{{ ansible_env.USER }}@{{ inventory_hostname_short }}::{{ backup_source_dir }}/"

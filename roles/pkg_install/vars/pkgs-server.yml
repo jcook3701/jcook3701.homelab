@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+pkg_install_server:
+  install:
+    bind9: true
+    dhcpd: false
+    firewalld: false
+    mdadm: false
+    openldap: true
+    samaba: true
+    vsftpd: true
+    webmin: false
+
+  pkgs_docker:
+    install:
+      guacamole: true

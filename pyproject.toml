@@ -66,6 +66,7 @@ tools = [
   "deptry>=0.24",
   "djlint>=1.36",
   "json-lint-tools>=0.1",
+  "j2lint>=1.2",
   "jinja2-cli>=0.8",
   "jinja2-time>=0.2",
   "mypy==1.9",
@@ -166,7 +167,7 @@ skip = [
 ]
 
 # words to ignore globally
-ignore-words-list = ["crate", "ba"]
+ignore-words-list = ["alis", "crate", "ba"]
 
 # extra options
 check-filenames = true

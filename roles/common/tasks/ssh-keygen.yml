@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Collect running user facts
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    tasks_from: sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Ensure ~/.ssh directory exists
+  ansible.builtin.file:
+    path: "{{ sudo_user_home }}/.ssh"
+    state: directory
+    mode: "0700"
+    owner: "{{ sudo_user_uid }}"
+    group: "{{ sudo_user_gid }}"
+
+- name: Check if SSH key exists
+  ansible.builtin.stat:
+    path: "{{ sudo_user_home }}/.ssh/id_rsa"
+  register: ssh_key
+
+- name: Generate SSH key if it does not exist
+  ansible.builtin.command: ssh-keygen -t rsa -b 2048 -f {{ sudo_user_home }}/.ssh/id_rsa -N ''
+  when: not ssh_key.stat.exists

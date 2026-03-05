@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Setup user git configuration
+  hosts: localhost
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Ensure ssh-key and auth config exist
+      ansible.builtin.include_role:
+        name: jcook3701.homelab.common
+        tasks_from: git-config.yml

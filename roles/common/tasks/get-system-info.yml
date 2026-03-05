@@ -1,0 +1,79 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# NOTE: This role is mostly for testing purposes.
+---
+- name: Get current date and time
+  ansible.builtin.command: date
+  register: datetime_output
+
+- name: Get system hostname
+  ansible.builtin.command: hostname
+  register: hostname_output
+
+- name: System Distribution
+  ansible.builtin.debug:
+    msg: "{{ ansible_distribution | lower }}"
+
+- name: System Distribution version
+  ansible.builtin.debug:
+    msg: "{{ ansible_distribution_version }}"
+
+- name: System Distribution major version
+  ansible.builtin.debug:
+    msg: "{{ ansible_distribution_major_version }}"
+
+- name: System OS Family
+  ansible.builtin.debug:
+    msg: "{{ ansible_os_family }}"
+
+  # NOTE: Equivalent to $(dpkg --print-architecture) for debian based systems.
+- name: System Architecture
+  ansible.builtin.debug:
+    msg: "{{ deb_architecture[ansible_architecture] }}"
+
+  # NOTE: Equivalent of lowercase distribution name.
+  # NOTE: Both 'when:' options work the same
+- name: Test
+  ansible.builtin.command: echo "hello World"
+  register: shell_output
+  when: ansible_distribution | lower == 'ubuntu'
+#  when: ansible_facts['distribution']|lower == 'ubuntu'
+
+# NOTE: Equivalent to $VERSION_CODENAME
+- name: Distribution Release
+  ansible.builtin.debug:
+    msg: "{{ ansible_distribution_release }}"
+
+- name: Shell Output
+  ansible.builtin.debug:
+    msg: "{{ shell_output }}"
+
+# - name: Ansible Facts
+#  debug:
+#    msg: "{{ ansible_facts }}"
+
+- name: Get the architecture, codename, & idname
+  ansible.builtin.shell: |
+    arch=$(dpkg --print-architecture)
+    codename=$(source /etc/os-release && echo $VERSION_CODENAME)
+    echo "$arch $codename"
+  args:
+    executable: /bin/bash
+  register: architecture_codename
+
+- name: Set facts for architecture and codename
+  ansible.builtin.set_fact:
+    arch: "{{ architecture_codename.stdout.split()[0] }}"
+    codename: "{{ architecture_codename.stdout.split()[1] }}"
+#    idname: "{{ architecture_codename.stdout.split()[5] }}"
+#  tags: [ never ]
+
+- name: Print architecture and codename
+  ansible.builtin.debug:
+    msg: "{{ arch }} {{ codename }}"
+
+- name: loop vars test
+  ansible.builtin.debug:
+    msg: "{{ item }}"
+  loop: "{{ service_groups_users }}"

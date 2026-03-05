@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Collect running user facts
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    tasks_from: sudo_user_facts.yml
+  when: sudo_user is not defined
+
+- name: Set {{ editor_bashrc }} to specified $EDITOR within ~/.bashrc
+  ansible.builtin.lineinfile:
+    path: "{{ sudo_user_home }}/.bashrc"
+    line: 'export EDITOR="{{ editor_bashrc }}"'
+    state: present

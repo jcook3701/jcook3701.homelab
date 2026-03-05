@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# TODO: Not used
+# nas_crons:
+#  backup_nas: true
+#  update_nas: true # TODO: Need to make this cron-job.
+#  backup_workstations: true
+#  update_workstations: true

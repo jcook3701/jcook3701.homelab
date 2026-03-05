@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# rmmod pcspkr ; echo "blacklist pcspkr" >>/etc/modprobe.d/blacklist.conf
+
+- name: Turn off system builtin speaker
+  block:
+    - name: Remove pcspkr module from running kernel
+      community.general.modprobe:
+        name: pcspkr
+        state: absent
+
+    - name: Ensure pcspkr is blacklisted
+      ansible.builtin.lineinfile:
+        path: /etc/modprobe.d/blacklist.conf
+        line: "blacklist pcspkr"
+        create: true
+        state: present
+        mode: "0644"

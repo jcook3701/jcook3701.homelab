@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Import Common Package Variables
+  ansible.builtin.include_vars: pkgs-common.yml
+
+- name: Installing Common Packages with apt-get
+  ansible.builtin.apt:
+    pkg:
+      - ansible
+      - tree
+      - paprefs
+
+- name: Docker Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkgs.docker-ce
+    tasks_from: debian-docker.yml
+  when: pkg_install_common.install.docker
+
+- name: Ctop Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkgs.ctop
+    tasks_from: ctop-install.yml
+  when: pkg_install_common.install.ctop
+
+- name: SSSD Install
+  ansible.builtin.include_role:
+    name: jcook3701.pkgs.sssd
+    tasks_from: sssd-install.yml
+  when: pkg_install_common.install.sssd

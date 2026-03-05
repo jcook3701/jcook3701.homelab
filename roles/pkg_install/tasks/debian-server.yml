@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Debian Server Base Install
+  block:
+    - name: Import Debian Server Variables
+      ansible.builtin.include_vars: debian-server.yml
+
+    - name: Installing Debian Server Packages
+      ansible.builtin.include_tasks: pkgs-all.yml

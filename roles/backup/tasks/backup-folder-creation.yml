@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Remote backup folder creation
+  tags: [never, server, workstation]
+  block:
+    - name: >-
+          Make {{ inventory_hostname_short }} backup directory {{ backup_dest_dir }} on {{ backup_server }}.
+      ansible.builtin.file:
+        path: "{{ backup_dest_dir }}"
+        state: directory
+        mode: "0755"
+      delegate_to: "{{ backup_server }}"
+
+    - name: Make individual backup directories for each included root directory
+      ansible.builtin.file:
+        path: "{{ backup_dest_dir }}/{{ inventory_hostname_short }}{{ item | regex_replace('\\/', '-') }}"
+        state: directory
+        mode: "0775"
+      loop: "{{ include }}"
+      delegate_to: "{{ backup_server }}"

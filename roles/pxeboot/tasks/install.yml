@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: DNS (bind9)
+  ansible.builtin.include_role:
+    name: jcook3701.pkgs.bind9
+
+- name: LDAP (openldap)
+  ansible.builtin.include_role:
+    name: jcook3701.pkgs.openldap
+
+- name: File Share (samba)
+  ansible.builtin.include_role:
+    name: jcook3701.pkgs.samba
+
+- name: Webserver (Nginx)
+  ansible.builtin.include_role:
+    name: jcook3701.pkgs.nginx

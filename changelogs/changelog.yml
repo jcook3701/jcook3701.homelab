@@ -13,4 +13,4 @@ releases:
         Ansible Home Lab automation.  Quickly gettup servers and workstations setup.
     fragments:
       - initial_release_summary.yml
-    release_date: '2026-02-24'
+    release_date: "2026-02-24"
